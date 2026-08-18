@@ -5,16 +5,17 @@
   --texte:#1c2b24;--shadow:0 2px 12px rgba(26,107,74,.10);
 }
 *{box-sizing:border-box;margin:0;padding:0}
+html{overflow-x:hidden}
 body{font-family:'Segoe UI',Arial,sans-serif;background:var(--gris-clair);color:var(--texte);min-height:100vh;overflow-x:hidden}
 
 /* HEADER */
-header{background:var(--vert);color:#fff;padding:0 1rem;display:flex;align-items:center;justify-content:space-between;height:50px;position:sticky;top:0;z-index:300;box-shadow:0 2px 8px rgba(0,0,0,.2)}
-.logo{display:flex;align-items:center;gap:8px;min-width:0}
-header h1{font-size:.92rem;font-weight:700;white-space:nowrap}
-header .sub{font-size:.65rem;opacity:.7}
-.hdr-right{display:flex;gap:6px;align-items:center;flex-shrink:0}
-.mode-badge{display:inline-flex;align-items:center;gap:4px;padding:4px 9px;border-radius:20px;font-size:.73rem;font-weight:700;cursor:pointer;border:none;transition:all .2s;white-space:nowrap}
-.mode-badge.view{background:rgba(255,255,255,.2);color:#fff}.mode-badge.view:hover{background:rgba(255,255,255,.3)}
+#chronosBanner{position:sticky;top:0;z-index:300}
+.banner-overlay{position:absolute;top:0;left:0;width:100%;padding:.5rem .8rem;display:flex;align-items:center;justify-content:space-between;pointer-events:none}
+.banner-overlay>*{pointer-events:auto}
+.banner-version{font-size:.62rem;color:#fff;opacity:.85;text-shadow:1px 1px 3px rgba(0,0,0,.6);font-weight:600}
+.banner-right{display:flex;gap:6px;align-items:center}
+.mode-badge{display:inline-flex;align-items:center;gap:4px;padding:4px 9px;border-radius:20px;font-size:.73rem;font-weight:700;cursor:pointer;border:none;transition:all .2s;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,.3)}
+.mode-badge.view{background:rgba(255,255,255,.25);color:#fff;backdrop-filter:blur(2px)}.mode-badge.view:hover{background:rgba(255,255,255,.35)}
 .mode-badge.admin{background:#fff;color:var(--vert)}
 
 /* NAV */
@@ -55,7 +56,7 @@ main{padding:.6rem .8rem}
 
 /* PLANNING WRAP */
 #planningCard{padding:.4rem;margin-bottom:0}
-.planning-wrap{width:100%;position:relative}
+.planning-wrap{width:100%;position:relative;overflow-x:hidden}
 .planning-wrap.admin-mode{overflow:auto;max-height:calc(100vh - 175px);height:auto!important}
 .scale-wrap{transform-origin:top left;display:inline-block}
 .planning-wrap:not(.admin-mode) .scale-wrap{position:absolute;top:0;left:0}
@@ -80,7 +81,9 @@ table.pl td.corner.r3{background:#e2efda;border:1px solid #9cbf87;z-index:17}
 table.pl td.corner.r4{z-index:16}
 table.pl tr.r-sem td.sem-label{background:#1a4a34;color:#fff;font-weight:700;padding:4px 6px;border:1px solid #0f3323;position:sticky;top:0;z-index:15}
 table.pl tr.r-sem td.sem-date{background:#1a4a34;color:#aed9c4;font-weight:400;text-align:right;padding:4px 6px;border:1px solid #0f3323;position:sticky;top:0;z-index:15}
-table.pl tr.r-jour td.jour-label{font-weight:700;text-align:center;padding:4px 2px;border:2px solid #555;color:#fff;overflow:hidden;white-space:nowrap}
+table.pl tr.r-jour td.jour-label{font-weight:700;text-align:center;padding:4px 2px;border:2px solid #555;color:#fff;overflow:hidden;white-space:nowrap;position:relative;background-color:#1a0533;background-image:radial-gradient(1px 1px at 12% 25%,#fff9 0%,transparent 100%),radial-gradient(1px 1px at 32% 65%,#fff7 0%,transparent 100%),radial-gradient(1.5px 1.5px at 52% 20%,#fffa 0%,transparent 100%),radial-gradient(1px 1px at 68% 55%,#fff6 0%,transparent 100%),radial-gradient(1px 1px at 85% 30%,#fff8 0%,transparent 100%),radial-gradient(1.5px 1.5px at 22% 80%,#fff7 0%,transparent 100%),radial-gradient(1px 1px at 78% 82%,#fff6 0%,transparent 100%)}
+table.pl tr.r-jour td.jour-label .jour-nom{color:#fff}
+table.pl tr.r-jour td.jour-label .jour-date{color:#c9a227;font-weight:600}
 table.pl tr.r-hnorm td.h-val{background:#dce6f1;color:#17375e;font-weight:700;text-align:center;padding:1px 1px;border:1px solid #aabdd4}
 table.pl tr.r-hnorm td.h-label{background:#dce6f1;color:#17375e;font-weight:700;text-align:center;padding:1px 2px;border:1px solid #aabdd4}
 table.pl tr.r-heff td.h-val{font-weight:700;text-align:center;padding:1px 1px;border:1px solid #9cbf87}
@@ -158,7 +161,7 @@ tr.inactif > td:not(:last-child){opacity:.45}tr.inactif > td:last-child{opacity:
 
 
 /* ── CHRONOS BANNER ── */
-#chronosBanner{
+#chronosBannerLegacy{
   width:100%;
   background:linear-gradient(135deg,#1a0533 0%,#2d0a5e 40%,#1a0533 100%);
   padding:0;

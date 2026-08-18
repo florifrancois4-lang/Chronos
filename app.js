@@ -115,6 +115,24 @@ function checkVisuPin(){
   setTimeout(()=>document.getElementById('visuPinError').textContent='', 2000);
 }
 
+// ═══════════════════════════════════════════════════════════
+// BANNIÈRE DYNAMIQUE
+// ═══════════════════════════════════════════════════════════
+// visu (non connecté)      → banner-chronos-mnemosyne.png
+// admin, onglet Mnémosyne  → banner-mnemosyne.png
+// admin, autres onglets    → banner-chronos.png
+function updateChronosBanner(){
+  const img=document.getElementById('chronosBannerImg');
+  if(!img)return;
+  let src='banner-chronos-mnemosyne.png';
+  if(isAdmin){
+    const activeTab=document.querySelector('.tab.active');
+    const onMnemosyne=activeTab&&activeTab.id==='tab-mnemosyne';
+    src=onMnemosyne?'banner-mnemosyne.png':'banner-chronos.png';
+  }
+  if(img.getAttribute('src')!==src)img.setAttribute('src',src);
+}
+
 function _enterViewMode(){
   document.getElementById('modeBadge').className='mode-badge view';
   document.getElementById('modeBadge').textContent='🔒 Admin';
@@ -127,6 +145,7 @@ function _enterViewMode(){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.getElementById('tab-planning').classList.add('active');
   goToday();
+  updateChronosBanner();
   // Recalculer le scale après rendu complet du DOM
   setTimeout(()=>applyAutoScale(), 100);
   // Tuto visu au premier accès
@@ -1637,7 +1656,7 @@ function renderProjetPlanning() {
       const ds=jourDates[j].str;
       const hasModif=(()=>{for(let h=0;h<nbH;h++)for(let ei=0;ei<emps.length;ei++){const _r=p.calendar[ds]?.[h];if(!_r)continue;const _v=Array.isArray(_r)?_r[ei]:_r[emps[ei].init];if(_v!==undefined&&_v!==getMasqueCell(ds,h,emps[ei].init))return true;}return false;})()
       const icon=hasModif?' ⚠':'';
-      html+=`<td class="jour-label" colspan="${ne}" style="background:${sbg};border-color:${sbg};font-size:0.82rem;overflow:hidden;white-space:nowrap">${JOURS[j]}${icon}<br><span style="font-size:0.68rem;opacity:.85;font-weight:500">${jourDates[j].label}</span></td>`;
+      html+=`<td class="jour-label" colspan="${ne}" style="border-color:#c9a227;font-size:0.82rem;overflow:hidden;white-space:nowrap"><span class="jour-nom">${JOURS[j]}${icon}</span><br><span class="jour-date" style="font-size:0.68rem;font-weight:600">${jourDates[j].label}</span></td>`;
       if(j<5)html+=`<td class="sep1" style="width:2px;background:${sbg}"></td><td class="sep2" style="width:2px;background:${sbg}"></td>`;
     }
     html+=`</tr>`;
@@ -2444,8 +2463,9 @@ function renderPlanning(){
       })();
       const modifIcon=jourHasModif?' ⚠':'';
       const isToday=jourDates[j].str===todayStr;
-      const jourBg=isToday?'#e67e22':sbg;
-      html+=`<td class="jour-label" colspan="${ne}" style="background:${jourBg};border-color:${jourBg};font-size:${FS};${isToday?'font-weight:800;':''}">${JOURS[j]}${modifIcon}<br><span style="font-size:${FSS};opacity:.85;font-weight:500">${jourDates[j].label}</span></td>`;
+      const todayStyle=isToday?'background:#e67e22;border-color:#e67e22;':'border-color:#c9a227;';
+      const dateColor=isToday?'#fff':'#c9a227';
+      html+=`<td class="jour-label" colspan="${ne}" style="${todayStyle}font-size:${FS};${isToday?'font-weight:800;':''}"><span class="jour-nom">${JOURS[j]}${modifIcon}</span><br><span class="jour-date" style="font-size:${FSS};font-weight:600;color:${dateColor}">${jourDates[j].label}</span></td>`;
       if(j<5)html+=`<td class="sep1" style="width:2px;background:${sbg}"></td><td class="sep2" style="width:2px;background:${sbg}"></td>`;
     }
     html+=`</tr>`;
@@ -2639,7 +2659,7 @@ function applyAutoScale(){
   requestAnimationFrame(()=>{
     const naturalW=tbl.offsetWidth,naturalH=tbl.offsetHeight;
     if(!naturalW||!naturalH){wrap.style.height='200px';return;}
-    const headerH=document.querySelector('header').offsetHeight||50;
+    const headerH=document.querySelector('header')?.offsetHeight||50;
     const navH=document.querySelector('nav')?.offsetHeight||0;
     const calNavH=document.querySelector('.cal-nav')?.offsetHeight||36;
     const cardPad=8;
@@ -2738,6 +2758,7 @@ function setAdminMode(){
   wrap.classList.add('admin-mode');wrap.style.height='';
   document.getElementById('scaleWrap').style.transform='none';
   renderPlanning();
+  updateChronosBanner();
 }
 function setViewMode(){
   if(!isViewer){demandCodeVisu();return;}
@@ -3711,6 +3732,7 @@ function showTab(name,btn){
   if(name==='mnemosyne'){renderMnemosyne();}
   if(name==='recap')initRecap();
   if(name==='params')initNotifSection();
+  updateChronosBanner();
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -4209,3 +4231,4 @@ function showToast(msg,err=false){
 }
 
 init();
+</script>
